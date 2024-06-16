@@ -14,8 +14,8 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
-    'title_prefix' => '',
+    'title' => 'Imporiente',
+    'title_prefix' => 'Admin |',
     'title_postfix' => '',
 
     /*
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>Impo</b>riente',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -114,7 +114,7 @@ return [
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'alt' => 'Logotipo de la empresa',
             'effect' => 'animation__shake',
             'width' => 60,
             'height' => 60,
@@ -134,11 +134,11 @@ return [
     */
 
     'usermenu_enabled' => true,
-    'usermenu_header' => false,
+    'usermenu_header' => true,
     'usermenu_header_class' => 'bg-primary',
-    'usermenu_image' => false,
-    'usermenu_desc' => false,
-    'usermenu_profile_url' => false,
+    'usermenu_image' => true,
+    'usermenu_desc' => true,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -154,8 +154,8 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => null,
-    'layout_fixed_navbar' => null,
+    'layout_fixed_sidebar' => true,
+    'layout_fixed_navbar' => true,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
 
@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -292,102 +292,131 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Menu-Configuration
     |
     */
-
     'menu' => [
-        // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
-            'type' => 'fullscreen-widget',
-            'topnav_right' => true,
-        ],
+            // Navbar items:
+            [
+                'type' => 'navbar-search',
+                'text' => 'search',
+                'topnav_right' => true,
+            ],
+            [
+                'type' => 'fullscreen-widget',
+                'topnav_right' => true,
+            ],
 
-        // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
-        [
-            'text' => 'blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
-        ],
-        [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'multilevel',
-            'icon' => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
+            // Sidebar items:
+            [
+                'type' => 'sidebar-menu-search',
+                'text' => 'search',
+            ],
+            [
+                'text' => 'Categoría',
+                'icon' => 'fas fa-fw fa-tags',
+                'submenu' => [
+                    [
+                        'text' => 'Crear',
+                        'url' => 'categoria/crear',
+                        'icon' => 'fas fa-fw fa-plus',
+                        'icon_color' => 'green',
+                    ],
+                    [
+                        'text' => 'Editar',
+                        'url' => 'categoria/editar',
+                        'icon' => 'fas fa-fw fa-edit',
+                        'icon_color' => 'blue',
                     ],
                 ],
-                [
-                    'text' => 'level_one',
-                    'url' => '#',
+            ],
+            [
+                'text' => 'Producto',
+                'icon' => 'fas fa-fw fa-box',
+                'submenu' => [
+                    [
+                        'text' => 'Importar desde Excel',
+                        'url' => 'producto/importar',
+                        'icon' => 'fas fa-fw fa-file-excel',
+                        'icon_color' => 'green',
+                    ],
+                    [
+                        'text' => 'Crear',
+                        'url' => 'producto/crear',
+                        'icon' => 'fas fa-fw fa-plus',
+                        'icon_color' => 'green',
+                    ],
+                    [
+                        'text' => 'Editar',
+                        'url' => 'producto/editar',
+                        'icon' => 'fas fa-fw fa-edit',
+                        'icon_color' => 'blue',
+                    ],
                 ],
             ],
+            [
+                'text' => 'Usuarios',
+                'icon' => 'fas fa-fw fa-users',
+                'submenu' => [
+                    [
+                        'text' => 'Administrar Usuarios',
+                        'url' => 'usuarios/administrar',
+                        'icon' => 'fas fa-fw fa-user-cog',
+                        // No specific color mentioned for user management icons
+                    ],
+                    [
+                        'text' => 'Administrar Clientes',
+                        'url' => 'clientes/administrar',
+                        'icon' => 'fas fa-fw fa-user-tie',
+                        // No specific color mentioned for user management icons
+                    ],
+                    [
+                        'text' => 'Administrar Trabajadores',
+                        'url' => 'trabajadores/administrar',
+                        'icon' => 'fas fa-fw fa-user-hard-hat',
+                        // No specific color mentioned for user management icons
+                    ],
+                ],
+            ],
+            [
+                'text' => 'Ventas',
+                'icon' => 'fas fa-fw fa-shopping-cart',
+                'submenu' => [
+                    [
+                        'text' => 'Crear cotización',
+                        'url' => 'ventas/crear-cotizacion',
+                        'icon' => 'fas fa-fw fa-file-invoice-dollar',
+                        // No specific color mentioned for sales icons
+                    ],
+                    [
+                        'text' => 'Administrar cotizaciones',
+                        'url' => 'cotizaciones/administrar',
+                        'icon' => 'fas fa-fw fa-folder-open',
+                        // No specific color mentioned for sales icons
+                    ],
+                    [
+                        'text' => 'Registrar Venta',
+                        'url' => 'ventas/registrar',
+                        'icon' => 'fas fa-fw fa-cash-register',
+                        // No specific color mentioned for sales icons
+                    ],
+                    
+                ],
+            ],
+            ['header' => 'labels'],
+            [
+                'text' => 'important',
+                'icon_color' => 'red',
+                'url' => '#',
+            ],
+            [
+                'text' => 'warning',
+                'icon_color' => 'yellow',
+                'url' => '#',
+            ],
+            [
+                'text' => 'information',
+                'icon_color' => 'cyan',
+                'url' => '#',
+            ],
         ],
-        ['header' => 'labels'],
-        [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
-        ],
-    ],
 
     /*
     |--------------------------------------------------------------------------
