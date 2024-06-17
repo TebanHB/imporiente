@@ -20,7 +20,7 @@ class VentasController extends Controller
      */
     public function create()
     {
-        return view('admin.categorias.create');
+        return view('admin.ventas.create');
     }
 
     /**

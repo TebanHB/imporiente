@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\VentasController;
 // Rutas de recurso para Admin
 Route::resource('categorias', CategoriasController::class)->names('admin.categorias');
 Route::resource('productos', ProductosController::class)->names('admin.productos');
+Route::get('importar/productos', [ProductosController::class, 'importar'])->name('admin.productos.importar');
+Route::post('admin/importar/productos', [ProductosController::class, 'importSubmit'])->name('admin.productos.importar.submit');
 Route::resource('usuarios', UsuariosController::class)->names('admin.usuarios');
 Route::resource('ventas', VentasController::class)->names('admin.ventas');
 //Route::get('/',[HomeController::class, 'index'])->middleware('verified')->name('admin');
