@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VentasController extends Controller
 {
@@ -20,7 +22,12 @@ class VentasController extends Controller
      */
     public function create()
     {
-        return view('admin.ventas.create');
+        /*$productosArray = DB::select("SELECT * FROM productos");
+        $productos = collect($productosArray)->map(function ($producto) {
+            return (object)$producto;
+        });*/
+        $productos = Producto::orderBy('id', 'desc')->get();
+        return view('admin.cotizaciones.create', compact('productos'));
     }
 
     /**

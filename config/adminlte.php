@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'use_ico_only' => false,
+    'use_ico_only' => true,
     'use_full_favicon' => false,
 
     /*
@@ -333,7 +333,7 @@ return [
                 'submenu' => [
                     [
                         'text' => 'Importar desde Excel',
-                        'url' => 'producto/importar',
+                        'route' => 'admin.productos.importar',
                         'icon' => 'fas fa-fw fa-file-excel',
                         'icon_color' => 'green',
                     ],
@@ -381,7 +381,7 @@ return [
                 'submenu' => [
                     [
                         'text' => 'Crear cotización',
-                        'url' => 'ventas/crear-cotizacion',
+                        'route' => 'admin.ventas.create',
                         'icon' => 'fas fa-fw fa-file-invoice-dollar',
                         // No specific color mentioned for sales icons
                     ],
