@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('producto_venta', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('producto_id')->constrained()->onDelete('cascade');
+            $table->foreignId('venta_id')->constrained()->onDelete('cascade');
+            $table->integer('cantidad');
+            $table->decimal('precio_venta', 16, 2); // Asume un máximo de 999,999.99 para el precio de venta
             $table->timestamps();
         });
     }

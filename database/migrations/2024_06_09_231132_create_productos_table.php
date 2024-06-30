@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('oem4')->nullable();
             $table->string('descripcion',500)->nullable();
             $table->string('imagen')->nullable();
-            $table->double('costo', 8, 2);
-            $table->double('precio', 8, 2);
+            $table->double('costo', 16, 2);
+            $table->double('precio', 16, 2);
             $table->double('alto')->nullable();
             $table->double('ancho')->nullable();
             $table->double('largo')->nullable();

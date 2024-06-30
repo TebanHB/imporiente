@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Carrito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -10,33 +11,53 @@ class CartController extends Controller
 {
     public function addToCart(Request $request)
     {
-        $cart = Cache::get('cart', []);
-        $item = $request->only(['id', 'nombre', 'cantodad', 'precio', 'costo']);
-        $cart[$item['id']] = $item;
-        Cache::put('cart', $cart);
+        $item = $request->only(['producto_id', 'cantidad', 'precio_venta_unidad']);
+        $carritoItem = Carrito::where('producto_id', $item['producto_id'])
+                                ->where('vendedor_id', auth()->id())
+                                ->first();
+
+        if ($carritoItem) {
+            // Opción 1: Incrementa la cantidad (y actualiza el precio si es necesario)
+            $carritoItem->cantidad += $item['cantidad'];
+            // Si deseas actualizar el precio también, descomenta la siguiente línea
+            //$carritoItem->precio_venta_unidad = $item['precio_venta_unidad'];
+            $carritoItem->save();
+        } else {
+            $item['vendedor_id'] = auth()->id();
+            // Si el producto no existe, lo añade al carrito
+            Carrito::create($item);
+        }
+
         return response()->json(['message' => 'Producto añadido correctamente.']);
     }
 
-    public function removeFromCart($itemId)
+    public function removeFromCart($productoId)
     {
-        $cart = Cache::get('cart', []);
-        if (isset($cart[$itemId])) {
-            unset($cart[$itemId]);
-            Cache::put('cart', $cart);
+        $carritoItem = Carrito::where('producto_id', $productoId)->first();
+
+        if ($carritoItem) {
+            $carritoItem->delete();
             return response()->json(['message' => 'Producto removido correctamente.']);
         }
-        return response()->json(['message' => 'Upps... no se encontro el producto.'], 404);
+
+        return response()->json(['message' => 'Upps... no se encontró el producto.'], 404);
     }
 
     public function showCart()
     {
-        $cart = Cache::get('cart', []);
+        $cart = Carrito::where('vendedor_id', auth()->id())->get();
         return response()->json(['cart' => $cart]);
+    }
+
+    public function getCartItemCount()
+    {
+        $totalCount = Carrito::sum('cantidad');
+        return response()->json(['count' => $totalCount]);
     }
 
     public function clearCart()
     {
-        Cache::forget('cart');
+        Carrito::where('vendedor_id', auth()->id())->delete();
         return response()->json(['message' => 'Carrito limpiado.']);
     }
 }

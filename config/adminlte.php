@@ -293,130 +293,125 @@ return [
     |
     */
     'menu' => [
-            // Navbar items:
-            [
-                'type' => 'navbar-search',
-                'text' => 'search',
-                'topnav_right' => true,
-            ],
-            [
-                'type' => 'fullscreen-widget',
-                'topnav_right' => true,
-            ],
+        // Navbar items:
+        [
+            'type' => 'fullscreen-widget',
+            'topnav_right' => true,
+        ],
 
-            // Sidebar items:
-            [
-                'type' => 'sidebar-menu-search',
-                'text' => 'search',
-            ],
-            [
-                'text' => 'Categoría',
-                'icon' => 'fas fa-fw fa-tags',
-                'submenu' => [
-                    [
-                        'text' => 'Crear',
-                        'url' => 'categoria/crear',
-                        'icon' => 'fas fa-fw fa-plus',
-                        'icon_color' => 'green',
-                    ],
-                    [
-                        'text' => 'Editar',
-                        'url' => 'categoria/editar',
-                        'icon' => 'fas fa-fw fa-edit',
-                        'icon_color' => 'blue',
-                    ],
+        // Sidebar items:
+        [
+            'type' => 'sidebar-menu-search',
+            'text' => 'search',
+        ],
+        [
+            'text' => 'Categoría',
+            'icon' => 'fas fa-fw fa-tags',
+            'submenu' => [
+                [
+                    'text' => 'Crear',
+                    'url' => 'categoria/crear',
+                    'icon' => 'fas fa-fw fa-plus',
+                    'icon_color' => 'green',
                 ],
-            ],
-            [
-                'text' => 'Producto',
-                'icon' => 'fas fa-fw fa-box',
-                'submenu' => [
-                    [
-                        'text' => 'Importar desde Excel',
-                        'route' => 'admin.productos.importar',
-                        'icon' => 'fas fa-fw fa-file-excel',
-                        'icon_color' => 'green',
-                    ],
-                    [
-                        'text' => 'Crear',
-                        'url' => 'producto/crear',
-                        'icon' => 'fas fa-fw fa-plus',
-                        'icon_color' => 'green',
-                    ],
-                    [
-                        'text' => 'Editar',
-                        'url' => 'producto/editar',
-                        'icon' => 'fas fa-fw fa-edit',
-                        'icon_color' => 'blue',
-                    ],
+                [
+                    'text' => 'Editar',
+                    'url' => 'categoria/editar',
+                    'icon' => 'fas fa-fw fa-edit',
+                    'icon_color' => 'blue',
                 ],
-            ],
-            [
-                'text' => 'Usuarios',
-                'icon' => 'fas fa-fw fa-users',
-                'submenu' => [
-                    [
-                        'text' => 'Administrar Usuarios',
-                        'url' => 'usuarios/administrar',
-                        'icon' => 'fas fa-fw fa-user-cog',
-                        // No specific color mentioned for user management icons
-                    ],
-                    [
-                        'text' => 'Administrar Clientes',
-                        'url' => 'clientes/administrar',
-                        'icon' => 'fas fa-fw fa-user-tie',
-                        // No specific color mentioned for user management icons
-                    ],
-                    [
-                        'text' => 'Administrar Trabajadores',
-                        'url' => 'trabajadores/administrar',
-                        'icon' => 'fas fa-fw fa-user-hard-hat',
-                        // No specific color mentioned for user management icons
-                    ],
-                ],
-            ],
-            [
-                'text' => 'Ventas',
-                'icon' => 'fas fa-fw fa-shopping-cart',
-                'submenu' => [
-                    [
-                        'text' => 'Crear cotización',
-                        'route' => 'admin.ventas.create',
-                        'icon' => 'fas fa-fw fa-file-invoice-dollar',
-                        // No specific color mentioned for sales icons
-                    ],
-                    [
-                        'text' => 'Administrar cotizaciones',
-                        'url' => 'cotizaciones/administrar',
-                        'icon' => 'fas fa-fw fa-folder-open',
-                        // No specific color mentioned for sales icons
-                    ],
-                    [
-                        'text' => 'Registrar Venta',
-                        'url' => 'ventas/registrar',
-                        'icon' => 'fas fa-fw fa-cash-register',
-                        // No specific color mentioned for sales icons
-                    ],
-                    
-                ],
-            ],
-            ['header' => 'labels'],
-            [
-                'text' => 'important',
-                'icon_color' => 'red',
-                'url' => '#',
-            ],
-            [
-                'text' => 'warning',
-                'icon_color' => 'yellow',
-                'url' => '#',
-            ],
-            [
-                'text' => 'information',
-                'icon_color' => 'cyan',
-                'url' => '#',
             ],
         ],
+        [
+            'text' => 'Producto',
+            'icon' => 'fas fa-fw fa-box',
+            'submenu' => [
+                [
+                    'text' => 'Importar desde Excel',
+                    'route' => 'admin.productos.importar',
+                    'icon' => 'fas fa-fw fa-file-excel',
+                    'icon_color' => 'green',
+                ],
+                [
+                    'text' => 'Crear',
+                    'url' => 'producto/crear',
+                    'icon' => 'fas fa-fw fa-plus',
+                    'icon_color' => 'green',
+                ],
+                [
+                    'text' => 'Editar',
+                    'url' => 'producto/editar',
+                    'icon' => 'fas fa-fw fa-edit',
+                    'icon_color' => 'blue',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Usuarios',
+            'icon' => 'fas fa-fw fa-users',
+            'submenu' => [
+                [
+                    'text' => 'Administrar Usuarios',
+                    'url' => 'usuarios/administrar',
+                    'icon' => 'fas fa-fw fa-user-cog',
+                    // No specific color mentioned for user management icons
+                ],
+                [
+                    'text' => 'Administrar Clientes',
+                    'url' => 'clientes/administrar',
+                    'icon' => 'fas fa-fw fa-user-tie',
+                    // No specific color mentioned for user management icons
+                ],
+                [
+                    'text' => 'Administrar Trabajadores',
+                    'url' => 'trabajadores/administrar',
+                    'icon' => 'fas fa-fw fa-user-hard-hat',
+                    // No specific color mentioned for user management icons
+                ],
+            ],
+        ],
+        [
+            'text' => 'Ventas',
+            'icon' => 'fas fa-fw fa-shopping-cart',
+            'submenu' => [
+                [
+                    'text' => 'Crear cotización',
+                    'route' => 'admin.ventas.create',
+                    'icon' => 'fas fa-fw fa-file-invoice-dollar',
+                    // No specific color mentioned for sales icons
+                ],
+                [
+                    'text' => 'Administrar cotizaciones',
+                    'url' => 'cotizaciones/administrar',
+                    'icon' => 'fas fa-fw fa-folder-open',
+                    // No specific color mentioned for sales icons
+                ],
+                [
+                    'text' => 'Registrar Venta',
+                    'url' => 'ventas/registrar',
+                    'icon' => 'fas fa-fw fa-cash-register',
+                    // No specific color mentioned for sales icons
+                ],
+
+            ],
+        ],
+        ['header' => 'labels'],
+        [
+            'text' => 'important',
+            'icon_color' => 'red',
+            'url' => '#',
+        ],
+        [
+            'text' => 'warning',
+            'icon_color' => 'yellow',
+            'url' => '#',
+        ],
+        [
+            'text' => 'information',
+            'icon_color' => 'cyan',
+            'url' => '#',
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -499,7 +494,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
