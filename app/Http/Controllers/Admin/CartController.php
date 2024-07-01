@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Carrito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -45,7 +46,16 @@ class CartController extends Controller
 
     public function showCart()
     {
-        $cart = Carrito::where('vendedor_id', auth()->id())->get();
+        $cart = Carrito::join('productos', 'carrito.producto_id', '=', 'productos.id')
+            ->leftJoin('users as clie', 'clie.id', '=', 'carrito.cliente_id')
+            ->leftJoin('users as vend', 'vend.id', '=', 'carrito.vendedor_id')
+            ->where('vendedor_id', auth()->id())
+            ->select('carrito.*', 
+                     'productos.nombre as nombre_producto', 
+                     'clie.name as nombre_cliente', 
+                     'vend.name as nombre_vendedor', 
+                     DB::raw('carrito.cantidad * carrito.precio_venta_unidad as subtotal'))
+            ->get();
         return response()->json(['cart' => $cart]);
     }
 

@@ -4,12 +4,55 @@
 
 
 @section('content_header')
-    <h1>Crear una cotizacion
-    </h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Crear una cotización</h1>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#carritoModal">Ver
+            Carrito</button>
+    </div>
 @stop
-
 @section('content')
-    <!-- Modal -->
+    <!-- Modal para Ver Carrito -->
+    <div class="modal fade" id="carritoModal" tabindex="-1" role="dialog" aria-labelledby="carritoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="carritoModalLabel">Carrito de Compras</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="carritoTable" class="display">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unidad</th>
+                                <th>Subtotal</th>
+                                <th>Vendedor</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Aquí se llenarán los datos dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i>
+                        Cerrar</button>
+                    <button type="button" class="btn btn-danger" id="vaciarCarrito"><i class="fas fa-trash"></i> Vaciar
+                        Carrito</button>
+                    <button type="button" class="btn btn-primary" id="concretarPropuesta"><i
+                            class="fas fa-check-circle"></i> Concretar Propuesta</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal agregar la carrito-->
+
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -53,7 +96,8 @@
                         <p class="card-text">{{ Str::limit($producto->descripcion, 100) }}</p>
                         <a href="{{ route('admin.productos.show', $producto->id) }}" class="btn btn-primary">Ver más</a>
                         <a href="#" class="btn btn-success addToCartBtn" data-id="{{ $producto->id }}"
-                            data-price="{{ $producto->precio }}" data-name="{{ $producto->nombre }}">Agregar al carrito</a>
+                            data-price="{{ $producto->precio }}" data-name="{{ $producto->nombre }}">Agregar al
+                            carrito</a>
                     </div>
                 </div>
             </div>
@@ -79,6 +123,75 @@
 @section('js')
     <script>
         $(document).ready(function() {
+
+            $('#vaciarCarrito').click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('cart.clear') }}", // Ruta para vaciar el carrito
+                    data: {
+                        _token: $("meta[name='csrf-token']").attr(
+                            "content") // Token CSRF necesario para peticiones POST en Laravel
+                    },
+                    success: function(response) {
+                        // Aquí puedes recargar los datos del carrito para reflejar que ahora está vacío
+                        // o actualizar la interfaz de usuario según sea necesario
+                        Swal.fire('¡Éxito!', 'El carrito ha sido vaciado.', 'success')
+                    },
+                    error: function(error) {
+                        // Manejo de errores
+                        Swal.fire('Error', 'No se pudo vaciar el carrito.', 'error');
+                    }
+                });
+            });
+
+
+
+
+
+            $('#carritoModal').on('show.bs.modal', function() {
+                $.ajax({
+                    url: '{{ route('cart.show') }}',
+                    method: 'GET',
+                    success: function(data) {
+                        // Limpia la tabla antes de llenarla
+                        $('#carritoTable').DataTable().clear().destroy();
+
+                        // Llenar la tabla
+                        $('#carritoTable').DataTable({
+                            data: data.cart,
+                            columns: [{
+                                    data: 'nombre_producto'
+                                },
+                                {
+                                    data: 'cantidad'
+                                },
+                                {
+                                    data: 'precio_venta_unidad'
+                                },
+                                {
+                                    data: 'subtotal'
+                                },
+                                {
+                                    data: 'nombre_vendedor'
+                                },
+                                {
+                                    data: 'created_at',
+                                    render: function(data) {
+                                        return new Date(data)
+                                            .toLocaleDateString() + ' ' +
+                                            new Date(data).toLocaleTimeString();
+                                    }
+                                }
+                            ]
+                        });
+                    },
+                    error: function(error) {
+                        // Manejo de errores
+                        console.error('Error al cargar datos del carrito:', error);
+                    }
+                });
+            });
+            //script anterior
             $('.addToCartBtn').click(function(e) {
                 e.preventDefault();
                 var productId = $(this).data('id');
@@ -89,7 +202,7 @@
                 $('#cantidad').val(1); // Establece la cantidad en 1 (puedes cambiar esto si lo deseas
                 $('#productName').text(productName); // Actualiza el nombre del producto en el modal
                 $('#precio_venta_unidad').val(
-                productPrice); // Establece el precio sugerido como valor inicial del precio de venta
+                    productPrice); // Establece el precio sugerido como valor inicial del precio de venta
                 $('#cartModal').modal('show');
             });
 

@@ -27,4 +27,3 @@ Route::prefix('cart')->group(function () {
 Route::get('/', function () {
     return view('admin.usuarios.index');
 });
-?>
