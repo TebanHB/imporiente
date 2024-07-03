@@ -382,7 +382,7 @@ return [
                 ],
                 [
                     'text' => 'Administrar cotizaciones',
-                    'url' => 'cotizaciones/administrar',
+                    'route' => 'admin.ventas.index',
                     'icon' => 'fas fa-fw fa-folder-open',
                     // No specific color mentioned for sales icons
                 ],

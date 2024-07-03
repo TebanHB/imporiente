@@ -23,15 +23,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <table id="carritoTable" class="display">
+                    <table id="carritoTable" class="display table w-100">
                         <thead>
                             <tr>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
                                 <th>Precio Unidad</th>
                                 <th>Subtotal</th>
-                                <th>Vendedor</th>
-                                <th>Fecha</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -135,7 +133,8 @@
                     success: function(response) {
                         // Aquí puedes recargar los datos del carrito para reflejar que ahora está vacío
                         // o actualizar la interfaz de usuario según sea necesario
-                        Swal.fire('¡Éxito!', 'El carrito ha sido vaciado.', 'success')
+                        Swal.fire('¡Éxito!', 'El carrito ha sido vaciado.', 'success');
+                        $('#carritoModal').modal('hide');
                     },
                     error: function(error) {
                         // Manejo de errores
@@ -143,6 +142,7 @@
                     }
                 });
             });
+
 
 
 
@@ -172,25 +172,61 @@
                                     data: 'subtotal'
                                 },
                                 {
-                                    data: 'nombre_vendedor'
+                                    data: null,
+                                    defaultContent: '<button class="btn btn-danger btn-sm eliminar-item">Eliminar</button>',
+                                    orderable: false
                                 },
-                                {
-                                    data: 'created_at',
-                                    render: function(data) {
-                                        return new Date(data)
-                                            .toLocaleDateString() + ' ' +
-                                            new Date(data).toLocaleTimeString();
-                                    }
-                                }
                             ]
                         });
                     },
                     error: function(error) {
-                        // Manejo de errores
                         console.error('Error al cargar datos del carrito:', error);
                     }
                 });
+
+                // Manejar clic en botón eliminar
+                $('#carritoTable').on('click', '.eliminar-item', function() {
+                    var row = $(this).closest('tr');
+                    var data = $('#carritoTable').DataTable().row(row).data();
+                    $.ajax({
+                        url: '{{ route('cart.remove', '') }}/' + data.id,
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response, textStatus, xhr) {
+                            if (xhr.status === 200) {
+                                // Actualizar la tabla
+                                $('#carritoTable').DataTable().row(row).remove().draw();
+                                // Muestra un mensaje de éxito con SweetAlert
+                                Swal.fire({
+                                    title: 'Éxito',
+                                    text: response.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'Aceptar'
+                                });
+                            } else {
+                                // Manejar otros códigos de estado HTTP como se desee
+                                console.log(
+                                    'Respuesta exitosa pero con código de estado:',
+                                    xhr.status);
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error('Error en la solicitud:', textStatus,
+                                errorThrown);
+                            // Muestra un mensaje de error con SweetAlert
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Error al eliminar el ítem.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                });
             });
+
             //script anterior
             $('.addToCartBtn').click(function(e) {
                 e.preventDefault();

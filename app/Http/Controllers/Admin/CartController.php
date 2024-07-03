@@ -14,8 +14,8 @@ class CartController extends Controller
     {
         $item = $request->only(['producto_id', 'cantidad', 'precio_venta_unidad']);
         $carritoItem = Carrito::where('producto_id', $item['producto_id'])
-                                ->where('vendedor_id', auth()->id())
-                                ->first();
+            ->where('vendedor_id', auth()->id())
+            ->first();
 
         if ($carritoItem) {
             // Opción 1: Incrementa la cantidad (y actualiza el precio si es necesario)
@@ -32,9 +32,9 @@ class CartController extends Controller
         return response()->json(['message' => 'Producto añadido correctamente.']);
     }
 
-    public function removeFromCart($productoId)
+    public function removeFromCart($id)
     {
-        $carritoItem = Carrito::where('producto_id', $productoId)->first();
+        $carritoItem = Carrito::findorfail($id);
 
         if ($carritoItem) {
             $carritoItem->delete();
@@ -50,11 +50,13 @@ class CartController extends Controller
             ->leftJoin('users as clie', 'clie.id', '=', 'carrito.cliente_id')
             ->leftJoin('users as vend', 'vend.id', '=', 'carrito.vendedor_id')
             ->where('vendedor_id', auth()->id())
-            ->select('carrito.*', 
-                     'productos.nombre as nombre_producto', 
-                     'clie.name as nombre_cliente', 
-                     'vend.name as nombre_vendedor', 
-                     DB::raw('carrito.cantidad * carrito.precio_venta_unidad as subtotal'))
+            ->select(
+                'carrito.*',
+                'productos.nombre as nombre_producto',
+                'clie.name as nombre_cliente',
+                'vend.name as nombre_vendedor',
+                DB::raw('carrito.cantidad * carrito.precio_venta_unidad as subtotal')
+            )
             ->get();
         return response()->json(['cart' => $cart]);
     }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamp('fecha_venta')->nullable();
             $table->date('expiracion_oferta')->nullable();
             $table->foreignId('cliente_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('vendedor_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('vendedor_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('estado');
             $table->timestamps();
         });
