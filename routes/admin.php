@@ -17,6 +17,7 @@ Route::get('importar/productos', [ProductosController::class, 'importar'])->name
 Route::post('admin/importar/productos', [ProductosController::class, 'importSubmit'])->name('admin.productos.importar.submit');
 Route::resource('usuarios', UsuariosController::class)->names('admin.usuarios');
 Route::resource('ventas', VentasController::class)->names('admin.ventas');
+Route::post('ventas/asignar-cliente', [VentasController::class, 'asignarClienteAjax'])->name('admin.ventas.asignarCliente');
 Route::prefix('cart')->group(function () {
     Route::post('/add', [CartController::class, 'addToCart'])->name('cart.add');
     Route::delete('/remove/{itemId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
