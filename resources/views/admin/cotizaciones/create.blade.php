@@ -43,8 +43,11 @@
                         Cerrar</button>
                     <button type="button" class="btn btn-danger" id="vaciarCarrito"><i class="fas fa-trash"></i> Vaciar
                         Carrito</button>
-                    <button type="button" class="btn btn-primary" id="concretarPropuesta"><i
+                    <form action="{{ route('admin.ventas.store') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-primary" id="concretarPropuesta"><i
                             class="fas fa-check-circle"></i> Concretar Propuesta</button>
+                        </form>
                 </div>
             </div>
         </div>
@@ -106,13 +109,17 @@
     <style>
         .card-img-top {
             width: 100%;
-            /* Hace la imagen responsiva */
             max-width: 100%;
-            /* Asegura que la imagen no sea más ancha que el contenedor */
             max-height: 200px;
-            /* Altura máxima para todas las imágenes */
             object-fit: cover;
-            /* Asegura que la imagen cubra el área sin perder su proporción */
+            background: #f3f3f3 url('ruta/a/tu/imagen/de/carga.gif') center center no-repeat;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .img-loaded {
+            opacity: 1;
+            /* Cambia a opacidad 1 cuando la imagen esté cargada */
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
@@ -120,8 +127,22 @@
 
 @section('js')
     <script>
-        $(document).ready(function() {
+        document.addEventListener("DOMContentLoaded", function() {
+            var images = document.querySelectorAll('.card-img-top');
 
+            images.forEach(function(img) {
+                if (img.complete) {
+                    img.classList.add('img-loaded');
+                } else {
+                    img.addEventListener('load', function() {
+                        img.classList.add('img-loaded');
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
             $('#vaciarCarrito').click(function() {
                 $.ajax({
                     type: "POST",
@@ -142,12 +163,6 @@
                     }
                 });
             });
-
-
-
-
-
-
             $('#carritoModal').on('show.bs.modal', function() {
                 $.ajax({
                     url: '{{ route('cart.show') }}',
