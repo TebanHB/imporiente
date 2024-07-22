@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Carrito;
+use App\Models\Empresa;
 use App\Models\Producto;
 use App\Models\ProductoVenta;
 use App\Models\User;
@@ -78,7 +79,7 @@ class VentasController extends Controller
                 'expiracion_oferta' => null, // Ajustar según sea necesario
                 'cliente_id' => null, // Asumiendo que el cliente es el usuario autenticado
                 'vendedor_id' => auth()->id(),
-                'estado' => 'pendiente', // Ajustar según sea necesario
+                'estado' => 'Pendiente', // Ajustar según sea necesario
             ]);
 
             // Paso 3: Para cada ítem en el carrito
@@ -112,7 +113,9 @@ class VentasController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $empresa = Empresa::first();
+        $venta = Venta::with(['vendedor', 'cliente', 'productos'])->find($id);
+        return view('admin.ventas.show', compact('venta', 'empresa'));
     }
 
     /**

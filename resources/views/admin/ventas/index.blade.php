@@ -48,6 +48,26 @@
                     <td>{{ $venta->vendedor->name }}</td>
                     <td>{{ $venta->total }}</td>
                     <td>{{ $venta->updated_at }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button"
+                                id="dropdownMenuButton{{ $venta->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                Opciones
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $venta->id }}">
+                                <li><a class="dropdown-item"
+                                        href="{{ route('admin.ventas.show', $venta->id) }}">Detalle</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="cambiarEstado({{ $venta->id }}, 'Pendiente')">A Pendiente</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="cambiarEstado({{ $venta->id }}, 'Completado')">A Completado</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="cambiarEstado({{ $venta->id }}, 'Cancelado')">A Cancelado</a></li>
+                                <li><a class="dropdown-item" href="#"
+                                        onclick="cambiarEstado({{ $venta->id }}, 'Devolucion')">A Devolución</a></li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
