@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Carrito;
 use App\Models\Empresa;
+use App\Models\Marca;
 use App\Models\Producto;
 use App\Models\ProductoVenta;
 use App\Models\User;
@@ -78,7 +79,8 @@ class VentasController extends Controller
             return (object)$producto;
         });*/
         $productos = Producto::orderBy('id', 'desc')->get();
-        return view('admin.cotizaciones.create', compact('productos'));
+        $marcas = Marca::all();
+        return view('admin.cotizaciones.create', compact('productos', 'marcas'));
     }
 
     /**

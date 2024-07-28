@@ -44,10 +44,10 @@
                     <button type="button" class="btn btn-danger" id="vaciarCarrito"><i class="fas fa-trash"></i> Vaciar
                         Carrito</button>
                     <form action="{{ route('admin.ventas.store') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-primary" id="concretarPropuesta"><i
-                            class="fas fa-check-circle"></i> Concretar Propuesta</button>
-                        </form>
+                        @csrf
+                        <button type="submit" class="btn btn-primary" id="concretarPropuesta"><i
+                                class="fas fa-check-circle"></i> Concretar Propuesta</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -94,7 +94,14 @@
                         class="card-img-top" alt="{{ $producto->nombre }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ $producto->nombre }}</h5>
-                        <p class="card-text">{{ Str::limit($producto->descripcion, 100) }}</p>
+                        <p class="card-text">{{ Str::limit($producto->descripcion, 100) }}
+                            <br>Categoria: {{ $producto->categoria->nombre }}
+                            <br>Precio: ${{ $producto->precio }}
+                            <br>Stock: {{ $producto->stock }}
+                            <br>Marcas: @foreach ($producto->marcas as $marca)
+                                <span>{{ $marca->nombre }}</span>{{ !$loop->last ? ',' : '' }}
+                            @endforeach
+                        </p>
                         <a href="{{ route('admin.productos.show', $producto->id) }}" class="btn btn-primary">Ver más</a>
                         <a href="#" class="btn btn-success addToCartBtn" data-id="{{ $producto->id }}"
                             data-price="{{ $producto->precio }}" data-name="{{ $producto->nombre }}">Agregar al
