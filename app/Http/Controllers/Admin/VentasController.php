@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class VentasController extends Controller
 {
@@ -19,29 +20,46 @@ class VentasController extends Controller
      */
     public function index()
     {
-        $clientes =User::role('cliente')->get();
+        $clientes = User::role('cliente')->get();
         if (auth()->user()->hasRole('admin')) {
             // El usuario es un administrador, mostrar todas las ventas incluyendo los datos del vendedor y del cliente
-            $ventas = Venta::with(['vendedor', 'cliente', 'productos'])->get()->map(function ($venta) {
-                $total = $venta->productos->reduce(function ($carry, $producto) {
-                    return $carry + ($producto->pivot->cantidad * $producto->pivot->precio_venta);
-                }, 0);
-                $venta->total = $total;
-                return $venta;
-            });
+            $ventas = Venta::with(['vendedor', 'cliente', 'productos'])
+                ->orderBy('id', 'desc')
+                ->get()
+                ->map(function ($venta) {
+                    $total = $venta->productos->reduce(function ($carry, $producto) {
+                        return $carry + ($producto->pivot->cantidad * $producto->pivot->precio_venta);
+                    }, 0);
+                    $venta->total = $total;
+                    return $venta;
+                });
         } else {
             // El usuario no es un administrador, mostrar solo sus ventas incluyendo los datos del cliente
-            $ventas = Venta::with(['vendedor', 'cliente', 'productos'])->where('vendedor_id', auth()->id())->get()->map(function ($venta) {
-                $total = $venta->productos->reduce(function ($carry, $producto) {
-                    return $carry + ($producto->pivot->cantidad * $producto->pivot->precio_venta);
-                }, 0);
-                $venta->total = $total;
-                return $venta;
-            });
+            $ventas = Venta::with(['vendedor', 'cliente', 'productos'])
+                ->where('vendedor_id', auth()->id())
+                ->orderBy('id', 'desc')
+                ->get()
+                ->map(function ($venta) {
+                    $total = $venta->productos->reduce(function ($carry, $producto) {
+                        return $carry + ($producto->pivot->cantidad * $producto->pivot->precio_venta);
+                    }, 0);
+                    $venta->total = $total;
+                    return $venta;
+                });
         }
-
-        return view('admin.ventas.index', compact('ventas', 'clientes'));
+        $empresa = Empresa::first();
+        return view('admin.ventas.index', compact('ventas', 'clientes', 'empresa'));
     }
+
+    public function cambiarEstado(Request $request, $ventaId)
+    {
+        $venta = Venta::findOrFail($ventaId);
+        $venta->estado = $request->input('estado');
+        $venta->save();
+
+        return response()->json(['success' => true]);
+    }
+
     public function asignarClienteAjax(Request $request)
     {
         $venta = Venta::find($request->venta_id);
@@ -118,6 +136,19 @@ class VentasController extends Controller
         return view('admin.ventas.show', compact('venta', 'empresa'));
     }
 
+    public function generarPDF($ventaId)
+{
+    $venta = Venta::with(['vendedor', 'cliente', 'productos'])->findOrFail($ventaId);
+
+    $total = $venta->productos->reduce(function ($carry, $producto) {
+        return $carry + ($producto->pivot->cantidad * $producto->pivot->precio_venta);
+    }, 0);
+    $venta->total = $total;
+    $empresa = Empresa::first();
+    $pdf = FacadePdf::loadView('admin.ventas.pdf', compact('venta', 'empresa'));
+
+    return $pdf->download('venta_' . $venta->id . '.pdf');
+}
     /**
      * Show the form for editing the specified resource.
      */

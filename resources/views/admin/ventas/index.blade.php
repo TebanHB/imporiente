@@ -46,7 +46,7 @@
                         @endif
                     </td>
                     <td>{{ $venta->vendedor->name }}</td>
-                    <td>{{ $venta->total }}</td>
+                    <td>{{ $venta->total*(1+$empresa->impuestos/100)}}</td>
                     <td>{{ $venta->updated_at }}</td>
                     <td>
                         <div class="dropdown">
@@ -55,17 +55,63 @@
                                 Opciones
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $venta->id }}">
-                                <li><a class="dropdown-item"
-                                        href="{{ route('admin.ventas.show', $venta->id) }}">Detalle</a></li>
-                                <li><a class="dropdown-item" href="#"
-                                        onclick="cambiarEstado({{ $venta->id }}, 'Pendiente')">A Pendiente</a></li>
-                                <li><a class="dropdown-item" href="#"
-                                        onclick="cambiarEstado({{ $venta->id }}, 'Completado')">A Completado</a></li>
-                                <li><a class="dropdown-item" href="#"
-                                        onclick="cambiarEstado({{ $venta->id }}, 'Cancelado')">A Cancelado</a></li>
-                                <li><a class="dropdown-item" href="#"
-                                        onclick="cambiarEstado({{ $venta->id }}, 'Devolucion')">A Devolución</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.ventas.show', $venta->id) }}">Detalle</a></li>
+                                @if($venta->estado !== 'Pendiente' && $venta->estado !== 'Completado' && $venta->estado !== 'Cancelado')
+                                    <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ $venta->id }}, 'Pendiente')">A Pendiente</a></li>
+                                @endif
+                                @if($venta->estado !== 'Completado' && $venta->estado !== 'Cancelado')
+                                    <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ $venta->id }}, 'Completado')">A Completado</a></li>
+                                @endif
+                                @if($venta->estado == 'Pendiente' && $venta->estado !== 'Cancelado')
+                                    <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ $venta->id }}, 'Cancelado')">A Cancelado</a></li>
+                                @endif
+                                @if($venta->estado == 'Completado')
+                                    <li><a class="dropdown-item" href="#" onclick="cambiarEstado({{ $venta->id }}, 'Devolucion')">A Devolución</a></li>
+                                @endif
                             </ul>
+                            <script>
+                                function cambiarEstado(ventaId, nuevoEstado) {
+                                    const url = `{{ route('admin.ventas.cambiar-estado', ['venta' => 'ventaIdPlaceholder']) }}`.replace('ventaIdPlaceholder', ventaId);
+                            
+                                    fetch(url, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                        },
+                                        body: JSON.stringify({ estado: nuevoEstado })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            Swal.fire({
+                                                title: 'Estado actualizado',
+                                                text: 'El estado de la venta ha sido actualizado correctamente.',
+                                                icon: 'success',
+                                                confirmButtonText: 'OK'
+                                            }).then(() => {
+                                                location.reload(); // Recargar la página para reflejar los cambios
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                title: 'Error',
+                                                text: 'Error al cambiar el estado.',
+                                                icon: 'error',
+                                                confirmButtonText: 'OK'
+                                            });
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        Swal.fire({
+                                            title: 'Error',
+                                            text: 'Error al cambiar el estado.',
+                                            icon: 'error',
+                                            confirmButtonText: 'OK'
+                                        });
+                                    });
+                                }
+                            </script>
                         </div>
                     </td>
                 </tr>

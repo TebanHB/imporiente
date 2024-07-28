@@ -1,0 +1,29 @@
+{
+    "font awesome 6 brands": {
+        "normal": "font_awesome_6_brands_normal_92c45b19798a109fcc8b8f9e249272d8"
+    },
+    "font awesome 6 free": {
+        "normal": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/font_awesome_6_free_normal_30b57e7665436a6587cd5386a637d3de",
+        "900": "font_awesome_6_free_900_72233ab0c0c82334bfa8594e8b8daca5"
+    },
+    "font awesome 5 brands": {
+        "normal": "font_awesome_5_brands_normal_92c45b19798a109fcc8b8f9e249272d8"
+    },
+    "font awesome 5 free": {
+        "900": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/font_awesome_5_free_900_72233ab0c0c82334bfa8594e8b8daca5",
+        "normal": "font_awesome_5_free_normal_30b57e7665436a6587cd5386a637d3de"
+    },
+    "fontawesome": {
+        "normal": "fontawesome_normal_43761f5746d8c4fa117cda43d0ce99da"
+    },
+    "poppins": {
+        "100": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/poppins_100_fe515c3509ac19a01331c85f34f23cac",
+        "200": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/poppins_200_e8c3951c97c4286db63d056338166bbb",
+        "300": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/poppins_300_87f0a8a73c876e947643eb7d19bec0b7",
+        "normal": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/poppins_normal_a62832bf75823019dc29c5a9c470d64d",
+        "500": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/poppins_500_a885de0ea35a644243715bf64b6d1a65",
+        "600": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/poppins_600_ca6698540fb485d7b756c91a54a37d8e",
+        "bold": "C:\\xampp\\htdocs\\imporiente\\storage\\fonts\/poppins_bold_87c49bf24d72f01a4af573680817521f",
+        "800": "poppins_800_a3f35df90afcc12957674bb493255c2e"
+    }
+}
