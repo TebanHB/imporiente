@@ -46,7 +46,7 @@
                         @endif
                     </td>
                     <td>{{ $venta->vendedor->name }}</td>
-                    <td>{{ $venta->total*(1+$empresa->impuestos/100)}}</td>
+                    <td>{{ $venta->total *(1+$empresa->impuestos/100)}}</td>
                     <td>{{ $venta->updated_at }}</td>
                     <td>
                         <div class="dropdown">

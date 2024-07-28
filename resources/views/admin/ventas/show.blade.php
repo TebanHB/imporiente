@@ -89,7 +89,7 @@
                                 @foreach ($venta->productos as $producto)
                                     <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
-                                        <td>{{ $producto->nombre }}</td>
+                                        <td><b>{{$producto->sku}} </b>{{ $producto->nombre }}</td>
                                         <td>{{ $producto->pivot->cantidad }}</td>
                                         <td>${{ $producto->pivot->precio_venta }}</td>
                                         <!-- Modificado para usar precio_venta -->

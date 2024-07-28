@@ -14,15 +14,15 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-    /*    // Crear el rol de admin si no existe
+        // Crear el rol de admin si no existe
         $roleAdmin = Role::firstOrCreate(['name' => 'admin']);
         // Crear el rol de vendedor si no existe
         $roleVendedor = Role::firstOrCreate(['name' => 'vendedor']);
         // Crear el rol de cliente si no existe
-       */ $roleCliente = Role::firstOrCreate(['name' => 'cliente']);
+        $roleCliente = Role::firstOrCreate(['name' => 'cliente']);
 
         // Crear un usuario administrador
-      /*  $admin = User::create([
+        $admin = User::create([
             'name' => 'Admin User',
             'email' => 'admin@admin.com',
             'password' => bcrypt('1234'), // Usa una contraseña segura en producción
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
             ]);
             $vendedor->assignRole($roleVendedor);
         }
-*/
+
         // Crear diez usuarios clientes
         for ($i = 1; $i <= 10; $i++) {
             $cliente = User::create([
