@@ -83,7 +83,7 @@ class UsuariosController extends Controller
         $usuario = User::findOrFail($id);
         $usuario->estado = 1;
         $usuario->save();
-        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario activado exitosamente.');
+        return redirect()->route('admin.usuarios.index')->with('status','success')->with('message', 'Usuario '.$usuario->name. ' activado exitosamente.');
     }
     /**
      * Remove the specified resource from storage.
@@ -97,12 +97,10 @@ class UsuariosController extends Controller
         if ($usuario) {
             // Cambiar el estado del usuario a 0
             $usuario->estado = 0;
-
             // Guardar los cambios
             $usuario->save();
-
             // Redirigir con un mensaje de éxito
-            return redirect()->route('admin.usuarios.index')->with('status', 'success')->with('message', 'Usuario desactivado correctamente.');
+            return redirect()->route('admin.usuarios.index')->with('status', 'success')->with('message', 'Usuario '.$usuario->name. ' fue desactivado correctamente.');
         } else {
             // Redirigir con un mensaje de error si el usuario no existe
             return redirect()->route('admin.usuarios.index')->with('status', 'error')->with('message', 'Usuario no encontrado.');
