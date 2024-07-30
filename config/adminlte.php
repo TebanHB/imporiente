@@ -305,19 +305,19 @@ return [
             'text' => 'search',
         ],
         [
-            'text' => 'Categoría',
+            'text' => 'Categoría/Marca',
             'icon' => 'fas fa-fw fa-tags',
             'submenu' => [
                 [
-                    'text' => 'Crear',
+                    'text' => 'Crear categoria',
                     'url' => 'categoria/crear',
                     'icon' => 'fas fa-fw fa-plus',
                     'icon_color' => 'green',
                 ],
                 [
-                    'text' => 'Editar',
+                    'text' => 'Crear marca',
                     'url' => 'categoria/editar',
-                    'icon' => 'fas fa-fw fa-edit',
+                    'icon' => 'fas fa-fw fa-plus',
                     'icon_color' => 'blue',
                 ],
             ],
@@ -352,19 +352,19 @@ return [
             'submenu' => [
                 [
                     'text' => 'Administrar Usuarios',
-                    'url' => 'usuarios/administrar',
+                    'route' => 'admin.usuarios.index',
                     'icon' => 'fas fa-fw fa-user-cog',
                     // No specific color mentioned for user management icons
                 ],
                 [
                     'text' => 'Administrar Clientes',
-                    'url' => 'clientes/administrar',
+                    'route' => 'admin.usuarios.clientes',
                     'icon' => 'fas fa-fw fa-user-tie',
                     // No specific color mentioned for user management icons
                 ],
                 [
                     'text' => 'Administrar Trabajadores',
-                    'url' => 'trabajadores/administrar',
+                    'route' => 'admin.usuarios.trabajadores',
                     'icon' => 'fas fa-fw fa-user-hard-hat',
                     // No specific color mentioned for user management icons
                 ],

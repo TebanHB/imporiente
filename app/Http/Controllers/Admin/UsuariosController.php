@@ -21,7 +21,7 @@ class UsuariosController extends Controller
      */
     public function clientes()
     {
-        $usuarios = User::all();
+        $usuarios = User::role('cliente')->get();
         return view('admin.usuarios.index', compact('usuarios'));
     }
     /**
@@ -29,7 +29,11 @@ class UsuariosController extends Controller
      */
     public function trabajadores()
     {
-        $usuarios = User::all();
+        $usuarios = User::whereHas('roles', function ($query) {
+            $query->where('name', 'admin')
+                ->orWhere('name', 'trabajador')
+                ->orWhere('name', 'vendedor');
+        })->get();
         return view('admin.usuarios.index', compact('usuarios'));
     }
     /**
@@ -74,11 +78,34 @@ class UsuariosController extends Controller
         //
     }
 
+    public function activate($id)
+    {
+        $usuario = User::findOrFail($id);
+        $usuario->estado = 1;
+        $usuario->save();
+        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario activado exitosamente.');
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        // Buscar el usuario por su ID
+        $usuario = User::find($id);
+
+        // Verificar si el usuario existe
+        if ($usuario) {
+            // Cambiar el estado del usuario a 0
+            $usuario->estado = 0;
+
+            // Guardar los cambios
+            $usuario->save();
+
+            // Redirigir con un mensaje de éxito
+            return redirect()->route('admin.usuarios.index')->with('status', 'success')->with('message', 'Usuario desactivado correctamente.');
+        } else {
+            // Redirigir con un mensaje de error si el usuario no existe
+            return redirect()->route('admin.usuarios.index')->with('status', 'error')->with('message', 'Usuario no encontrado.');
+        }
     }
 }

@@ -15,6 +15,9 @@ Route::resource('categorias', CategoriasController::class)->names('admin.categor
 Route::resource('productos', ProductosController::class)->names('admin.productos');
 Route::get('importar/productos', [ProductosController::class, 'importar'])->name('admin.productos.importar');
 Route::post('admin/importar/productos', [ProductosController::class, 'importSubmit'])->name('admin.productos.importar.submit');
+Route::get('usuarios/clientes', [UsuariosController::class, 'clientes'])->name('admin.usuarios.clientes');
+Route::post('/admin/usuarios/{id}/activate', [UsuariosController::class, 'activate'])->name('admin.usuarios.activate');
+Route::get('usuarios/trabajadores', [UsuariosController::class, 'trabajadores'])->name('admin.usuarios.trabajadores');
 Route::resource('usuarios', UsuariosController::class)->names('admin.usuarios');
 Route::resource('ventas', VentasController::class)->names('admin.ventas');
 Route::post('ventas/{venta}/cambiar-estado', [VentasController::class, 'cambiarEstado'])->name('admin.ventas.cambiar-estado');
