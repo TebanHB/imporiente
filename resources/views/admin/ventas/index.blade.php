@@ -24,13 +24,13 @@
                 <tr>
                     <td>{{ $venta->id }}</td>
                     <td
-                        class="{{ $venta->estado == 'pendiente'
+                        class="{{ $venta->estado == 'Pendiente'
                             ? 'table-warning'
-                            : ($venta->estado == 'cancelado'
+                            : ($venta->estado == 'Cancelado'
                                 ? 'table-danger'
-                                : ($venta->estado == 'devolucion'
+                                : ($venta->estado == 'Devolucion'
                                     ? 'table-danger'
-                                    : ($venta->estado == 'vendido'
+                                    : ($venta->estado == 'Completado'
                                         ? 'table-success'
                                         : ''))) }}">
                         {{ $venta->estado }}

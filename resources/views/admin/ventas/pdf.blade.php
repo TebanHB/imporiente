@@ -1,133 +1,108 @@
-<div class="card">
-    <div class="card-body">
-        <div class="container mb-5 mt-3">
-            <div class="row d-flex align-items-baseline">
-                <div class="col-xl-9">
-                    <p style="color: #7e8d9f;font-size: 20px;">Proforma<strong>: {{ $venta->id }}</strong></p>
-                </div>
-                <div class="col-xl-3 float-end">
-                    <a data-mdb-ripple-init class="btn btn-light text-capitalize border-0"  data-mdb-ripple-color="dark"><i
-                            class="fas fa-print text-primary"></i> Print</a>
-                    <a href="{{ route('ventas.pdf', $venta->id) }}" data-mdb-ripple-init
-                        class="btn btn-light text-capitalize" data-mdb-ripple-color="dark"><i
-                            class="far fa-file-pdf text-danger"></i> Export</a>
-                </div>
-                <hr>
-            </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Factura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/pdf/invoice.css') }}">
 
-            <div class="container">
-                <div class="col-md-12">
-                    <div class="text-center">
-                        <h1 class="pt-0">{{ $empresa->nombre }}</h1>
+</head>
+<body>
+    <div class="invoice-wrapper" id="print-area">
+        <div class="invoice">
+            <div class="invoice-container">
+                <!-- Incluye aquí el contenido de la factura con las variables Blade -->
+                <div class="invoice-head">
+                    <div class="invoice-head-top">
+                        <div class="invoice-head-top-left text-start">
+                            <img src="{{ asset('AdminLTELogo.ico') }}">
+                        </div>
+                        <div class="invoice-head-top-right text-end">
+                            <h3>Invoice</h3>
+                        </div>
                     </div>
-
-                </div>
-
-
-                <div class="row">
-                    <div class="col-xl-8">
-                        <ul class="list-unstyled">
-                            <li class="text-muted">Para: <span style="color:#5d9fc5 ;">
-                                    @if ($venta->cliente)
-                                        {{ $venta->cliente->name }}
-                                    @else
-                                        Sin asignar
-                                    @endif
-                                </span></li>
-                            <li class="text-muted">{{ $empresa->calle }}, {{ $empresa->ciudad }}</li>
-                            <li class="text-muted">{{ $empresa->pais }}</li>
-                            <li class="text-muted"><i class="fas fa-phone"></i> {{ $empresa->numero }}</li>
-                        </ul>
+                    <div class="hr"></div>
+                    <div class="invoice-head-middle">
+                        <div class="invoice-head-middle-left text-start">
+                            <p><span class="text-bold">Fecha</span>: {{ $venta->updated_at->format('d/m/Y') }}</p>
+                        </div>
+                        <div class="invoice-head-middle-right text-end">
+                            <p><span class="text-bold">Proforma #:</span>{{ $venta->id }}</p>
+                        </div>
                     </div>
-                    <div class="col-xl-4">
-                        <p class="text-muted">Proforma</p>
-                        <ul class="list-unstyled">
-                            <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
-                                    class="fw-bold">Codigo de Venta:# </span>{{ $venta->id }}</li>
-                            <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
-                                    class="fw-bold">Vendedor: </span>{{ $venta->vendedor->name }}</li>
-                            <li class="text-muted"><i class="fas fa-circle" style="color:#84B0CA ;"></i> <span
-                                    class="fw-bold">Fecha de creacion: </span>{{ $venta->created_at->format('d/m/Y') }}
-                            </li>
-                            <li class="text-muted"><i class="fas fa-circle"
-                                    style="{{ match ($venta->estado) {
-                                        default => 'color: #84B0CA;', // Color por defecto
-                                    } }}"></i>
-                                <span class="me-1 fw-bold">Estado:</span><span class="badge"
-                                    style="{{ match ($venta->estado) {
-                                        'Cancelado' => 'background-color: #FFA500; color: black;', // Naranja
-                                        'Pendiente' => 'background-color: #FFFF00; color: black;', // Amarillo
-                                        'Completado' => 'background-color: #008000; color: white;', // Verde
-                                        'Devolucion' => 'background-color: #FF0000; color: white;', // Rojo
-                                        default => 'background-color: #84B0CA; color: black;', // Color por defecto
-                                    } }} fw-bold">{{ $venta->estado }}</span>
-                            </li>
-                        </ul>
+                    <div class="hr"></div>
+                    <div class="invoice-head-bottom">
+                        <div class="invoice-head-bottom-left">
+                            <ul>
+                                <li class="text-bold">Invoiced To:</li>
+                                <li>{{ $venta->cliente ? $venta->cliente->name : 'Sin asignar' }}</li>
+                                <li>{{ $empresa->calle }}, {{ $empresa->ciudad }}</li>
+                                <li>{{ $empresa->pais }}</li>
+                            </ul>
+                        </div>
+                        <div class="invoice-head-bottom-right">
+                            <ul class="text-end">
+                                <li class="text-bold">Pay To:</li>
+                                <li>{{ $empresa->nombre }}</li>
+                                <li>{{ $empresa->calle }}</li>
+                                <li>{{ $empresa->ciudad }}</li>
+                                <li>{{ $empresa->pais }}</li>
+                                <li>{{ $empresa->numero }}</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-
-                <div class="row my-2 mx-1 justify-content-center">
-                    <table class="table table-striped table-borderless">
-                        <thead style="background-color:#84B0CA ;" class="text-white">
-                            <tr>
-                                <th scope="col">N°</th>
-                                <th scope="col">Descripcion</th>
-                                <th scope="col">Cantidad</th>
-                                <th scope="col">Precio Unitario</th>
-                                <th scope="col">Monto</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($venta->productos as $producto)
+                <div class="overflow-view">
+                    <div class="invoice-body">
+                        <table>
+                            <thead>
                                 <tr>
-                                    <th scope="row">{{ $loop->iteration }}</th>
-                                    <td><b>{{$producto->sku}} </b>{{ $producto->nombre }}</td>
-                                    <td>{{ $producto->pivot->cantidad }}</td>
-                                    <td>${{ $producto->pivot->precio_venta }}</td>
-                                    <!-- Modificado para usar precio_venta -->
-                                    <td>${{ $producto->pivot->precio_venta * $producto->pivot->cantidad }}</td>
-                                    <!-- Modificado para usar precio_venta -->
+                                    <td class="text-bold">N°</td>
+                                    <td class="text-bold">Descripcion</td>
+                                    <td class="text-bold">Cantidad</td>
+                                    <td class="text-bold">Precio Unitario</td>
+                                    <td class="text-bold">Monto</td>
                                 </tr>
-                            @endforeach
-                        </tbody>
-
-                    </table>
-                </div>
-                <div class="row">
-                    <div class="col-xl-8">
-                        <p class="ms-3"> <!-- AQUI DEBE DE IR ALGUN TEXTO/COMENTARIO--></p>
+                            </thead>
+                            <tbody>
+                                @foreach ($venta->productos as $producto)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td><b>{{ $producto->sku }} </b>{{ $producto->nombre }}</td>
+                                        <td>{{ $producto->pivot->cantidad }}</td>
+                                        <td>${{ $producto->pivot->precio_venta }}</td>
+                                        <td class="text-end">${{ $producto->pivot->precio_venta * $producto->pivot->cantidad }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @php
+                        $subtotal = 0;
+                        foreach ($venta->productos as $producto) {
+                            $subtotal += $producto->pivot->precio_venta * $producto->pivot->cantidad;
+                        }
+                        $taxRate = $empresa->impuestos / 100;
+                        $taxAmount = $subtotal * $taxRate; // Calcula el monto del impuesto
+                        $total = $subtotal + $taxAmount; // Calcula el total
+                    @endphp
+                        <div class="invoice-body-bottom">
+                            <div class="invoice-body-info-inline">
+                                <div class="info-item-td text-end text-bold">Sub Total:</div>
+                                <div class="info-item-td text-end">${{ $subtotal }}</div>
+                            </div>
+                            <div class="invoice-body-info-inline">
+                                <div class="info-item-td text-end text-bold">Tax:</div>
+                                <div class="info-item-td text-end">${{ $taxAmount }}</div>
+                            </div>
+                            <div class="invoice-body-info-inline">
+                                <div class="info-item-td text-end text-bold">Total:</div>
+                                <div class="info-item-td text-end">${{ $total }}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-xl-3">
-                        <ul class="list-unstyled">
-                            @php
-                                $subtotal = 0;
-                                foreach ($venta->productos as $producto) {
-                                    $subtotal += $producto->pivot->precio_venta * $producto->pivot->cantidad;
-                                }
-                                $taxRate = $empresa->impuestos / 100;
-                                $taxAmount = $subtotal * $taxRate; // Calcula el monto del impuesto
-                                $total = $subtotal + $taxAmount; // Calcula el total
-                            @endphp
-
-                            <li class="text-muted ms-3"><span class="text-black me-4">SubTotal:
-                                </span><b>${{ $subtotal }}</b></li>
-                            <li class="text-muted ms-3 mt-2"><span
-                                    class="text-black me-4">IVA({{ strpos((string) $empresa->impuestos, '.00') !== false ? intval($empresa->impuestos) : $empresa->impuestos }}%):
-                                </span><b>${{ $taxAmount }}</b></li>
-                        </ul>
-                        <p class="text-black float-start"><span class="text-black me-3"> Total: </span><span
-                                style="font-size: 25px;">${{ $total }}</span></p>
-                    </div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-xl-10">
-                        <p>Gracias por tu preferencia</p>
-                    </div>
-
-                </div>
-
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>

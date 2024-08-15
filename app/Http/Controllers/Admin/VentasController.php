@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Carrito;
+use App\Models\Categoria;
 use App\Models\Empresa;
 use App\Models\Marca;
 use App\Models\Producto;
@@ -74,13 +75,10 @@ class VentasController extends Controller
      */
     public function create()
     {
-        /*$productosArray = DB::select("SELECT * FROM productos");
-        $productos = collect($productosArray)->map(function ($producto) {
-            return (object)$producto;
-        });*/
         $productos = Producto::orderBy('id', 'desc')->get();
         $marcas = Marca::all();
-        return view('admin.cotizaciones.create', compact('productos', 'marcas'));
+        $categorias = Categoria::all();
+        return view('admin.cotizaciones.create', compact('productos', 'marcas', 'categorias'));
     }
 
     /**
@@ -121,7 +119,7 @@ class VentasController extends Controller
             Carrito::where('vendedor_id', auth()->id())->delete();
 
             DB::commit();
-            return redirect()->route('admin.ventas.index')->with('success', 'Venta creada con éxito');
+            return redirect()->route('admin.ventas.index')->with('success', 'Venta #'.$venta->id.' creada con éxito');
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['error' => 'Error al realizar la venta'], 500);
@@ -148,8 +146,8 @@ class VentasController extends Controller
     $venta->total = $total;
     $empresa = Empresa::first();
     $pdf = FacadePdf::loadView('admin.ventas.pdf', compact('venta', 'empresa'));
-
-    return $pdf->download('venta_' . $venta->id . '.pdf');
+    return view('admin.ventas.pdf', compact('venta', 'empresa'));
+    //return $pdf->download('venta_' . $venta->id . '.pdf');
 }
     /**
      * Show the form for editing the specified resource.

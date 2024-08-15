@@ -31,5 +31,5 @@ Route::prefix('cart')->group(function () {
 });
 //Route::get('/',[HomeController::class, 'index'])->middleware('verified')->name('admin');
 Route::get('/', function () {
-    return view('admin.usuarios.index');
+    return view('admin.index');
 });

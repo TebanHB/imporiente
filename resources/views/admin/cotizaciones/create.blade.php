@@ -4,11 +4,52 @@
 
 
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center">
-        <h1>Crear una cotización</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#carritoModal">Ver
-            Carrito</button>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Crear una cotizacion</a>
+        <div class="collapse navbar-collapse" id="navbarSearch">
+            <form class="form-inline my-2 my-lg-0 ml-auto">
+                <input class="form-control mr-sm-2" type="search" placeholder="buscar por Codigo" aria-label="Search"
+                    list="Codigo" id="codigoSearch">
+                <datalist id="Codigo">
+                    @foreach ($productos as $producto)
+                        @if ($producto->sku)
+                            <option value="{{ $producto->sku }}">
+                        @endif
+                        @if ($producto->oem1)
+                            <option value="{{ $producto->oem1 }}">
+                        @endif
+                        @if ($producto->oem2)
+                            <option value="{{ $producto->oem2 }}">
+                        @endif
+                        @if ($producto->oem3)
+                            <option value="{{ $producto->oem3 }}">
+                        @endif
+                        @if ($producto->oem4)
+                            <option value="{{ $producto->oem4 }}">
+                        @endif
+                    @endforeach
+                </datalist>
+
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar Nombre" aria-label="Search"
+                    list="Nombre" id="nombreSearch">
+                <datalist id="Nombre">
+                    @foreach ($productos as $producto)
+                        <option value="{{ $producto->nombre }}">
+                    @endforeach
+                </datalist>
+
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar Categoria" aria-label="Search"
+                    list="Categoria" id="categoriaSearch">
+                <datalist id="Categoria">
+                    @foreach ($categorias as $categoria)
+                        <option value="{{ $categoria->nombre }}">
+                    @endforeach
+                </datalist>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#carritoModal">Ver
+                    Carrito</button>
+            </form>
+        </div>
+    </nav>
 @stop
 @section('content')
     <!-- Modal para Ver Carrito -->
@@ -134,17 +175,97 @@
 
 @section('js')
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var images = document.querySelectorAll('.card-img-top');
+        const productos = @json($productos);
 
-            images.forEach(function(img) {
-                if (img.complete) {
-                    img.classList.add('img-loaded');
-                } else {
-                    img.addEventListener('load', function() {
+        document.addEventListener("DOMContentLoaded", function() {
+            const codigoSearch = document.getElementById('codigoSearch');
+            const nombreSearch = document.getElementById('nombreSearch');
+            const categoriaSearch = document.getElementById('categoriaSearch');
+
+            // Event listeners para los inputs de búsqueda
+            codigoSearch.addEventListener('input', filterProducts);
+            nombreSearch.addEventListener('input', filterProducts);
+            categoriaSearch.addEventListener('input', filterProducts);
+
+            function filterProducts() {
+                const codigo = codigoSearch.value.toLowerCase();
+                const nombre = nombreSearch.value.toLowerCase();
+                const categoria = categoriaSearch.value.toLowerCase();
+
+                const filteredProducts = productos.filter(producto => {
+                    return (
+                        (codigo === '' || producto.sku.toLowerCase().includes(codigo) ||
+                            producto.oem1?.toLowerCase().includes(codigo) ||
+                            producto.oem2?.toLowerCase().includes(codigo) ||
+                            producto.oem3?.toLowerCase().includes(codigo) ||
+                            producto.oem4?.toLowerCase().includes(codigo)) &&
+                        (nombre === '' || producto.nombre.toLowerCase().includes(nombre)) &&
+                        (categoria === '' || producto.categoria.nombre.toLowerCase().includes(
+                            categoria))
+                    );
+                });
+
+                renderProducts(filteredProducts);
+            }
+
+            function renderProducts(products) {
+                const productsContainer = document.querySelector('.row');
+                productsContainer.innerHTML = '';
+
+                products.forEach(producto => {
+                    const productCard = `
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="card" style="width: 18rem;">
+                            <img src="{{ asset('storage/productos/${producto.imagen}.jpg') }}" loading="lazy"
+                                class="card-img-top img-loaded" alt="${producto.nombre}">
+                            <div class="card-body">
+                                <h5 class="card-title">${producto.nombre}</h5>
+                                <p class="card-text">${producto.descripcion.substr(0, 100)}
+                                    <br>Categoria: ${producto.categoria.nombre}
+                                    <br>Precio: $${producto.precio}
+                                    <br>Stock: ${producto.stock}
+                                    <br>Marcas: ${producto.marcas.map(marca => `<span>${marca.nombre}</span>`).join(', ')}
+                                </p>
+                                <a href="{{ url('/admin/productos/show/${producto.id}') }}" class="btn btn-primary">Ver más</a>
+                                <a href="#" class="btn btn-success addToCartBtn" data-id="${producto.id}"
+                                    data-price="${producto.precio}" data-name="${producto.nombre}">Agregar al carrito</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    productsContainer.insertAdjacentHTML('beforeend', productCard);
+                });
+
+                // Añadir la clase 'img-loaded' a las imágenes que se carguen correctamente
+                var images = document.querySelectorAll('.card-img-top');
+                images.forEach(function(img) {
+                    if (img.complete) {
                         img.classList.add('img-loaded');
-                    });
-                }
+                    } else {
+                        img.addEventListener('load', function() {
+                            img.classList.add('img-loaded');
+                        });
+                    }
+                });
+            }
+
+            // Inicializar el renderizado con todos los productos
+            renderProducts(productos);
+
+            // Delegación de eventos para el botón "Agregar al carrito"
+            $(document).on('click', '.addToCartBtn', function(e) {
+                e.preventDefault();
+                var productId = $(this).data('id');
+                var productPrice = $(this).data('price');
+                var productName = $(this).data('name');
+
+                $('#producto_id').val(productId);
+                $('#suggestedPrice').text(productPrice);
+                $('#cantidad').val(1);
+                $('#productName').text(productName);
+                $('#precio_venta_unidad').val(productPrice);
+
+                $('#cartModal').modal('show');
             });
         });
     </script>
@@ -207,7 +328,7 @@
                 });
 
                 // Manejar clic en botón eliminar
-                $('#carritoTable').on('click', '.eliminar-item', function() {
+                $('#carritoTable').off('click', '.eliminar-item').on('click', '.eliminar-item', function() {
                     var row = $(this).closest('tr');
                     var data = $('#carritoTable').DataTable().row(row).data();
                     $.ajax({

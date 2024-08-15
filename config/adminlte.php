@@ -365,7 +365,7 @@ return [
                 [
                     'text' => 'Administrar Trabajadores',
                     'route' => 'admin.usuarios.trabajadores',
-                    'icon' => 'fas fa-fw fa-user-hard-hat',
+                    'icon' => 'fa-solid fa-user-tie',
                     // No specific color mentioned for user management icons
                 ],
             ],
@@ -386,13 +386,6 @@ return [
                     'icon' => 'fas fa-fw fa-folder-open',
                     // No specific color mentioned for sales icons
                 ],
-                [
-                    'text' => 'Registrar Venta',
-                    'url' => 'ventas/registrar',
-                    'icon' => 'fas fa-fw fa-cash-register',
-                    // No specific color mentioned for sales icons
-                ],
-
             ],
         ],
         ['header' => 'labels'],
