@@ -57,8 +57,20 @@ class VentasController extends Controller
     {
         $venta = Venta::findOrFail($ventaId);
         $venta->estado = $request->input('estado');
+    
+        if ($venta->estado === 'Completado') {
+            foreach ($venta->productos as $producto) {
+                $cantidadVendida = $producto->pivot->cantidad;
+    
+                // Asegurarse de que el stock no sea negativo
+                $producto->stock = $producto->stock-$cantidadVendida;
+                
+                $producto->save();
+            }
+        }
+    
         $venta->save();
-
+    
         return response()->json(['success' => true]);
     }
 
