@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Imports\ProductosImport;
+use App\Models\Categoria;
 use App\Models\Producto;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class ProductosController extends Controller
     public function index()
     {
         $productos = Producto::all();
+        $categorias = Categoria::all();
         return view('admin.productos.index', compact('productos'));
     }
     /**
@@ -77,7 +79,8 @@ class ProductosController extends Controller
      */
     public function create()
     {
-        return view('admin.categorias.create');
+        $categorias = Categoria::orderby('nombre')->get();
+        return view('admin.productos.create', compact('categorias'));
     }
 
     /**
@@ -85,7 +88,53 @@ class ProductosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'sku' => 'required|string|max:255',
+            'nombre' => 'required|string|max:255',
+            'oem1' => 'nullable|string|max:255',
+            'oem2' => 'nullable|string|max:255',
+            'oem3' => 'nullable|string|max:255',
+            'oem4' => 'nullable|string|max:255',
+            'descripcion' => 'nullable|string',
+            'costo' => 'required|numeric|min:0',
+            'precio' => 'required|numeric|min:0',
+            'stock' => 'required|numeric|min:0',
+            'alto' => 'nullable|numeric|min:0',
+            'ancho' => 'nullable|numeric|min:0',
+            'largo' => 'nullable|numeric|min:0',
+            'peso' => 'nullable|numeric|min:0',
+            'categoria_id' => 'required|exists:categorias,id',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $producto = new Producto();
+        $producto->sku = $request->sku;
+        $producto->nombre = $request->nombre;
+        $producto->oem1 = $request->oem1;
+        $producto->oem2 = $request->oem2;
+        $producto->oem3 = $request->oem3;
+        $producto->oem4 = $request->oem4;
+        $producto->descripcion = $request->descripcion;
+        $producto->costo = $request->costo;
+        $producto->precio = $request->precio;
+        $producto->stock = $request->stock;
+        $producto->alto = $request->alto;
+        $producto->ancho = $request->ancho;
+        $producto->largo = $request->largo;
+        $producto->peso = $request->peso;
+        $producto->categoria_id = $request->categoria_id;
+
+
+
+        if ($request->hasFile('imagen')) {
+            $file = $request->file('imagen');
+            $path = $file->store('public/imagenes');
+            $producto->imagen = $path;
+        }
+
+        $producto->save();
+
+        return redirect()->route('admin.productos.index')->with('success', 'Producto creado exitosamente.');
     }
 
     /**

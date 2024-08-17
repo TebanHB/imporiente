@@ -334,13 +334,13 @@ return [
                 ],
                 [
                     'text' => 'Crear',
-                    'url' => 'producto/crear',
+                    'route' => 'admin.productos.create',
                     'icon' => 'fas fa-fw fa-plus',
                     'icon_color' => 'green',
                 ],
                 [
                     'text' => 'Editar',
-                    'url' => 'producto/editar',
+                    'route' => 'admin.productos.index',
                     'icon' => 'fas fa-fw fa-edit',
                     'icon_color' => 'blue',
                 ],
@@ -446,17 +446,17 @@ return [
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
             ],
