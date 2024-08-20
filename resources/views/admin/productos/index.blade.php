@@ -31,7 +31,7 @@
                         <td>{{ $producto->descripcion }}</td>
                         <td>
                             @if($producto->imagen)
-                                <img loading="lazy" src="{{ asset('storage/productos/' . $producto->imagen . '.jpg') }}" alt="Imagen no encontrada o con otra extencion" width="100" height="100">
+                                <img loading="lazy" src="{{ asset('storage/productos/' . $producto->imagen ) }}" alt="Imagen no encontrada o con otra extencion" width="100" height="100">
                             @else
                                 No Image
                             @endif
