@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -388,6 +389,33 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'Empresa',
+            'icon' => 'fas fa-fw fa-building',
+            'can'  => 'manage-empresa',
+            'submenu' => [
+                [
+                    'text' => 'General',
+                    'route' => 'admin.empresa.index',
+                    'icon' => 'fas fa-fw fa-info-circle',
+                    'can' => 'datos-empresa',
+                ],
+                [
+                    'text' => 'Roles',
+                    'route' => 'admin.roles.index',
+                    'icon' => 'fas fa-fw fa-user-shield',
+                    'can' => 'roles',
+                ],
+                [
+                    'text' => 'Permisos',
+                    'route' => 'admin.permisos.index',
+                    'icon' => 'fas fa-fw fa-key',
+                    'can' => 'permisos',
+                ],
+            ],
+            // Otros elementos del menú...
+        ],
+
         ['header' => 'labels'],
         [
             'text' => 'important',

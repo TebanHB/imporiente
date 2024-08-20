@@ -7,7 +7,7 @@ use App\Models\Categoria;
 use Exception;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-
+use Illuminate\Support\Facades\Auth;
 
 class ProductosImport implements ToModel, WithHeadingRow
 {
@@ -53,6 +53,13 @@ class ProductosImport implements ToModel, WithHeadingRow
         } else {
             $this->actualizados++;
         }
+        activity()
+            ->causedBy(Auth::user())
+            ->performedOn($producto)
+            ->withProperties(['attributes' => $producto->getAttributes()])
+            ->event('imported_via_excel')
+            ->log($producto->wasRecentlyCreated ? 'created' : 'updated');
+
         return $producto;
     }
 }

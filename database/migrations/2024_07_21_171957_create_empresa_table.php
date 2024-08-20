@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('ciudad');
             $table->string('estado')->nullable();
             $table->string('calle')->nullable();
+            $table->string('ruat')->nullable();
             $table->decimal('impuestos', 5, 2); // Asumiendo un porcentaje con dos decimales
             $table->timestamps();
         });

@@ -17,5 +17,16 @@
 @stop
 
 @section('js')
-    <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('error'))
+                Swal.fire({
+                    title: '¡Error!',
+                    text: '{{ session('error') }}',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                });
+            @endif
+        });
+    </script>
 @stop

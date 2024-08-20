@@ -5,7 +5,6 @@
     <title>Factura</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/pdf/invoice.css') }}">
-
 </head>
 <body>
     <div class="invoice-wrapper" id="print-area">
@@ -15,10 +14,10 @@
                 <div class="invoice-head">
                     <div class="invoice-head-top">
                         <div class="invoice-head-top-left text-start">
-                            <img src="{{ asset('AdminLTELogo.ico') }}">
+                            <img src="{{ asset('vendor/adminlte/dist/img/AdminLTELogo.png') }}" alt="Logo">
                         </div>
                         <div class="invoice-head-top-right text-end">
-                            <h3>Invoice</h3>
+                            <h3>Proforma</h3>
                         </div>
                     </div>
                     <div class="hr"></div>
@@ -34,19 +33,17 @@
                     <div class="invoice-head-bottom">
                         <div class="invoice-head-bottom-left">
                             <ul>
-                                <li class="text-bold">Invoiced To:</li>
-                                <li>{{ $venta->cliente ? $venta->cliente->name : 'Sin asignar' }}</li>
+                                <li><b>Cliente: {{ $venta->cliente ? $venta->cliente->name : 'Sin asignar' }}</li>
                                 <li>{{ $empresa->calle }}, {{ $empresa->ciudad }}</li>
+                                <li>{{ $empresa->ciudad }}</li>
                                 <li>{{ $empresa->pais }}</li>
                             </ul>
                         </div>
                         <div class="invoice-head-bottom-right">
                             <ul class="text-end">
-                                <li class="text-bold">Pay To:</li>
                                 <li>{{ $empresa->nombre }}</li>
-                                <li>{{ $empresa->calle }}</li>
-                                <li>{{ $empresa->ciudad }}</li>
-                                <li>{{ $empresa->pais }}</li>
+                                <li><b>Vendedor: </b>{{ $venta->vendedor->name }}</li>
+                                <li><b>Estado: </b>{{ $venta->estado }}</li>
                                 <li>{{ $empresa->numero }}</li>
                             </ul>
                         </div>
