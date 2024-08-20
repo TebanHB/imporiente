@@ -30,6 +30,7 @@ class PermissionsTableSeeder extends Seeder
             'create permissions',
             'manage-empresa',
             'datos-empresa',
+            'asignar roles y permisos',
         ];
 
         foreach ($permissions as $permission) {

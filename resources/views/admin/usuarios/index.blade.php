@@ -7,7 +7,7 @@
     <nav class="navbar navbar-light bg-light justify-content-between">
         <p class="navbar-brand">Administracion de usuarios</p>
         <form class="form-inline">
-            <button class="btn btn-outline-success" type="button">Registrar usuario</button>
+            <a href="{{ route('admin.usuarios.create') }}" class="btn btn-outline-success">Registrar usuario</a>
         </form>
     </nav>
 @stop
