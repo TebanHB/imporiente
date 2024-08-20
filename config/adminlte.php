@@ -404,19 +404,19 @@ return [
                     'text' => 'Roles',
                     'route' => 'admin.roles.index',
                     'icon' => 'fas fa-fw fa-user-shield',
-                    'can' => 'roles',
+                    'can' => 'view roles',
                 ],
                 [
                     'text' => 'Permisos',
                     'route' => 'admin.permisos.index',
                     'icon' => 'fas fa-fw fa-key',
-                    'can' => 'permisos',
+                    'can' => 'view permissions',
                 ],
             ],
             // Otros elementos del menú...
         ],
 
-        ['header' => 'labels'],
+       /* ['header' => 'labels'],
         [
             'text' => 'important',
             'icon_color' => 'red',
@@ -431,7 +431,7 @@ return [
             'text' => 'information',
             'icon_color' => 'cyan',
             'url' => '#',
-        ],
+        ],*/
     ],
 
     /*

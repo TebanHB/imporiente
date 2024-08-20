@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         // En la bdd insert into empresa values (1,	"Imporiente",	"Chile"	,"+56 9 6140 2532"	,"Santiago"	,"Santiago de Chile"	,"Emiliano Figueroa 754",	19.00, null,null);
         $this->call([
             RolesTableSeeder::class,
+            PermissionsTableSeeder::class,
             UserSeeder::class,
         ]);
     }
