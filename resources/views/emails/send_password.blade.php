@@ -63,7 +63,7 @@
         </div>
         <div class="content">
             <h1>Hola, {{ $user->name }}</h1>
-            <p>Tu cuenta ha sido creada exitosamente. Aquí está tu contraseña temporal:</p>
+            <p>Tu cuenta ha sido creada exitosamente. Aquí está tu contraseña generada aleatoriamente:</p>
             <p class="password">{{ $password }}</p>
             <p>Por favor, cambia tu contraseña después de iniciar sesión.</p>
         </div>
