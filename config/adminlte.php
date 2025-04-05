@@ -387,6 +387,12 @@ return [
                     'icon' => 'fas fa-fw fa-folder-open',
                     // No specific color mentioned for sales icons
                 ],
+                [
+                    'text' => 'Asignar clientes ',
+                    'route' => 'admin.ventas.index',
+                    'icon' => 'fas fa-fw fa-user-plus',
+                    // No specific color mentioned for sales icons
+                ],
             ],
         ],
         [
