@@ -88,48 +88,44 @@ class ProductosController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'sku' => 'required|string|max:255',
-            'nombre' => 'required|string|max:255',
-            'oem1' => 'nullable|string|max:255',
-            'oem2' => 'nullable|string|max:255',
-            'oem3' => 'nullable|string|max:255',
-            'oem4' => 'nullable|string|max:255',
-            'descripcion' => 'nullable|string',
-            'costo' => 'required|numeric|min:0',
-            'precio' => 'required|numeric|min:0',
-            'stock' => 'required|numeric|min:0',
-            'alto' => 'nullable|numeric|min:0',
-            'ancho' => 'nullable|numeric|min:0',
-            'largo' => 'nullable|numeric|min:0',
-            'peso' => 'nullable|numeric|min:0',
-            'categoria_id' => 'required|exists:categorias,id',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        $data = $request->validate([
+            'sku'               => 'required|string|max:255|unique:productos,sku',
+            'nombre'            => 'required|string|max:255',
+            'oem1'              => 'required|string|max:255',
+            'oem2'              => 'nullable|string|max:255',
+            'oem3'              => 'nullable|string|max:255',
+            'oem4'              => 'nullable|string|max:255',
+            'descripcion'       => 'nullable|string',
+            'imagen'            => 'nullable|image|mimes:jpeg,png,jpg,gif,avif|max:2048',
+            'tipo_de_vehiculo'  => 'required|string|max:255',
+            'origen'            => 'required|string|max:255',
+            'ubicacion'         => 'nullable|string|max:255',
+            'costo_yen'         => 'required|numeric|min:0',
+            'costo_usd'         => 'required|numeric|min:0',
+            'costo_clp'         => 'required|numeric|min:0',
+            'precio'            => 'required|numeric|min:0',
+            'alto'              => 'nullable|numeric|min:0',
+            'ancho'             => 'nullable|numeric|min:0',
+            'largo'             => 'nullable|numeric|min:0',
+            'peso'              => 'nullable|numeric|min:0',
+            'stock'             => 'required|integer|min:0',
+            'categoria_id'      => 'required|exists:categorias,id',
+            'marcas'            => 'nullable|array',
+            'marcas.*'          => 'exists:marcas,id',
+            'modelos'           => 'nullable|array',
+            'modelos.*'         => 'exists:modelos,id',
         ]);
 
-        $producto = new Producto();
-        $producto->sku = $request->sku;
-        $producto->nombre = $request->nombre;
-        $producto->oem1 = $request->oem1;
-        $producto->oem2 = $request->oem2;
-        $producto->oem3 = $request->oem3;
-        $producto->oem4 = $request->oem4;
-        $producto->descripcion = $request->descripcion;
-        $producto->costo = $request->costo;
-        $producto->precio = $request->precio;
-        $producto->stock = $request->stock;
-        $producto->alto = $request->alto;
-        $producto->ancho = $request->ancho;
-        $producto->largo = $request->largo;
-        $producto->peso = $request->peso;
-        $producto->categoria_id = $request->categoria_id;
-
-
-
         if ($request->hasFile('imagen')) {
-            $file = $request->file('imagen');
-            $path = $file->store('public/imagenes');
-            $producto->imagen = $path;
+            $data['imagen'] = $request->file('imagen')->store('imagenes', 'public');
+        }
+        $producto = Producto::create($data);
+
+        if (! empty($data['marcas'])) {
+            $producto->marcas()->sync($data['marcas']);
+        }
+        if (! empty($data['modelos'])) {
+            $producto->modelos()->sync($data['modelos']);
         }
 
         $producto->save();
