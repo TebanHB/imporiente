@@ -57,7 +57,7 @@
                 value="{{ old('impuestos', isset($empresa) ? $empresa->impuestos : '') }}">
         </div>
         <div class="form-group">
-            <label for="impuestos">Ruat</label>
+            <label for="ruat">Rut</label>
             <input type="text" name="ruat" id="ruat" class="form-control"
                 value="{{ old('ruat', isset($empresa) ? $empresa->ruat : '') }}">
         </div>
