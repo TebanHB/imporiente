@@ -10,12 +10,10 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Maatwebsite\Excel\Concerns\ShouldQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ProductosImport implements ToModel, WithHeadingRow
+class ProductosImport implements ToModel, WithHeadingRow, WithChunkReading, ShouldQueue
 {
     public $categorias_creadas = 0;
     public $marcas_creadas     = 0;
@@ -24,56 +22,62 @@ class ProductosImport implements ToModel, WithHeadingRow
     public $actualizados       = 0;
     public $fila               = 0;
 
+    /**
+     * Laravel Excel se encargará de procesar 500 filas por chunk.
+     */
+    public function chunkSize(): int
+    {
+        return 500;
+    }
+
+
     public function model(array $row)
     {
         $this->fila++;
 
         // 1) Categoría
         $categoria = Categoria::firstOrCreate([
-            'nombre' => trim($row['categoria'])
+            'nombre' => trim($row['categoria']),
         ]);
         if ($categoria->wasRecentlyCreated) {
             $this->categorias_creadas++;
         }
 
-        // 2) Crear/actualizar Producto
+        // 2) Producto
         $producto = Producto::updateOrCreate(
             ['sku' => trim($row['codigo'])],
             [
-                // <-- Aquí recuperas el 'NOMBRE' de tu Excel
-                'nombre' => trim($row['nombre'])
-                    ?: throw new \Exception("Fila {$this->fila}: falta NOMBRE"),
-                // el resto de campos…
-                'oem1'             => trim($row['oem1'] ?? ''),
-                'oem2'             => trim($row['oem2'] ?? ''),
-                'oem3'             => trim($row['oem3'] ?? ''),
-                'oem4'             => trim($row['oem4'] ?? ''),
-                'tipo_de_vehiculo' => trim($row['tipo_de_vehiculo'] ?? ''),
-                'origen'           => trim($row['origen'] ?? ''),
-                'ubicacion'        => trim($row['ubicacion'] ?? ''),
-                'descripcion'      => trim($row['descripcion'] ?? ''),
-                'imagen'           => trim($row['imagen'] ?? ''),
-                'costo_yen'        => $row['costo_yen']   ?? 0,
-                'costo_usd'        => $row['costo_usd']   ?? 0,
-                'costo_clp'        => $row['costo_clp']   ?? 0,
-                'precio'           => $row['precio']
-                    ?? throw new Exception("Fila {$this->fila}: falta PRECIO"),
-                'alto'             => $row['alto']        ?? null,
-                'ancho'            => $row['ancho']       ?? null,
-                'largo'            => $row['largo']       ?? null,
-                'peso'             => $row['peso']        ?? null,
-                'stock'            => $row['stock']       ?? 0,
-                'categoria_id'     => $categoria->id,
+                'nombre'            => trim($row['nombre']) 
+                                          ?: throw new Exception("Fila {$this->fila}: falta NOMBRE"),
+                'oem1'              => trim($row['oem1'] ?? ''),
+                'oem2'              => trim($row['oem2'] ?? ''),
+                'oem3'              => trim($row['oem3'] ?? ''),
+                'oem4'              => trim($row['oem4'] ?? ''),
+                'tipo_de_vehiculo'  => trim($row['tipo_de_vehiculo'] ?? ''),
+                'origen'            => trim($row['origen'] ?? ''),
+                'ubicacion'         => trim($row['ubicacion'] ?? ''),
+                'descripcion'       => trim($row['descripcion'] ?? ''),
+                'imagen'            => trim($row['imagen'] ?? ''),
+                'costo_yen'         => $row['costo_yen']   ?? 0,
+                'costo_usd'         => $row['costo_usd']   ?? 0,
+                'costo_clp'         => $row['costo_clp']   ?? 0,
+                'precio'            => $row['precio'] 
+                                          ?? throw new Exception("Fila {$this->fila}: falta PRECIO"),
+                'alto'              => $row['alto']        ?? null,
+                'ancho'             => $row['ancho']       ?? null,
+                'largo'             => $row['largo']       ?? null,
+                'peso'              => $row['peso']        ?? null,
+                'stock'             => $row['stock']       ?? 0,
+                'categoria_id'      => $categoria->id,
             ]
         );
-
 
         $producto->wasRecentlyCreated
             ? $this->creados++
             : $this->actualizados++;
 
-        // 3) Marcas (singular, pero puede traer varias separadas por coma)
-        if (!empty($row['marca'])) {
+        // 3) Marcas
+        if (! empty($row['marca'])) {
             $ids = [];
             foreach (explode(',', $row['marca']) as $nombreMarca) {
                 $m = Marca::firstOrCreate(['nombre' => trim($nombreMarca)]);
@@ -83,8 +87,8 @@ class ProductosImport implements ToModel, WithHeadingRow
             $producto->marcas()->sync($ids);
         }
 
-        // 4) Modelos (plural)
-        if (!empty($row['modelos'])) {
+        // 4) Modelos
+        if (! empty($row['modelos'])) {
             $ids = [];
             foreach (explode(',', $row['modelos']) as $nombreModelo) {
                 $mo = Modelo::firstOrCreate(['nombre' => trim($nombreModelo)]);
