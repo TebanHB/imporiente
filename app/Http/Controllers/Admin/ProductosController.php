@@ -52,8 +52,8 @@ class ProductosController extends Controller
         } catch (\Exception $e) {
             // dd('Exception: '.$e->getMessage());
             $errorMessage = $this->parseDatabaseError($e->getMessage());
-            return back()->with('error', $errorMessage);
-            //return back()->with('error', 'Error inesperado: ' . $e->getMessage());
+            //return back()->with('error', $errorMessage);
+            return back()->with('error', 'Error inesperado: ' . $e->getMessage());
 
         } catch (\Throwable $e) { // Captura cualquier error/exception que no sea \Exception
             // dd('Throwable: '.$e->getMessage());
