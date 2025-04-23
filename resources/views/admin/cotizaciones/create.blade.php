@@ -8,7 +8,7 @@
         <a class="navbar-brand" href="#">Crear una cotizacion</a>
         <div class="collapse navbar-collapse" id="navbarSearch">
             <form class="form-inline my-2 my-lg-0 ml-auto">
-                <input class="form-control mr-sm-2" type="search" placeholder="buscar por Codigo" aria-label="Search"
+                <input class="form-control mr-sm-2" type="search" placeholder="Codigo imporiente" aria-label="Search"
                     list="Codigo" id="codigoSearch">
                 <datalist id="Codigo">
                     @foreach ($productos as $producto)
@@ -30,7 +30,7 @@
                     @endforeach
                 </datalist>
 
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar Nombre" aria-label="Search"
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar articulo" aria-label="Search"
                     list="Nombre" id="nombreSearch">
                 <datalist id="Nombre">
                     @foreach ($productos as $producto)
