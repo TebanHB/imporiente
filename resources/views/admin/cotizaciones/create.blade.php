@@ -131,8 +131,8 @@
         @foreach ($productos as $producto)
             <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="card" style="width: 18rem;">
-                    <img src="{{ asset('storage/productos/' . $producto->imagen) }}" loading="lazy"
-                        class="card-img-top" alt="{{ $producto->nombre }}">
+                    <img src="{{ asset('storage/' . $producto->imagen) }}" loading="lazy" class="card-img-top"
+                        alt="{{ $producto->nombre }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ $producto->nombre }}</h5>
                         <p class="card-text">{{ Str::limit($producto->descripcion, 100) }}
@@ -216,7 +216,7 @@
                     const productCard = `
                     <div class="col-md-4 col-sm-6 col-xs-12">
                         <div class="card" style="width: 18rem;">
-                            <img src="{{ asset('storage/productos/${producto.imagen}.jpg') }}" loading="lazy"
+                            <img src="{{ asset('storage/${producto.imagen}') }}" loading="lazy"
                                 class="card-img-top img-loaded" alt="${producto.nombre}">
                             <div class="card-body">
                                 <h5 class="card-title">${producto.nombre}</h5>

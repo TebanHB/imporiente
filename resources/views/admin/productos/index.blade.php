@@ -7,54 +7,58 @@
 @stop
 
 @section('content')
-        <table id="productos-table" class="table table-bordered table-striped">
-            <thead>
+    <table id="productos-table" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>SKU</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Imagen</th>
+                <th>Costo</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($productos as $producto)
                 <tr>
-                    <th>ID</th>
-                    <th>SKU</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Imagen</th>
-                    <th>Costo</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Categoría</th>
-                    <th>Acciones</th>
+                    <td>{{ $producto->id }}</td>
+                    <td>{{ $producto->sku }}</td>
+                    <td>{{ $producto->nombre }}</td>
+                    <td>{{ $producto->descripcion }}</td>
+                    <td>
+                        @if ($producto->imagen)
+                            <img loading="lazy" src="{{ asset('storage/' . $producto->imagen) }}" alt="Imagen no encontrada"
+                                width="100" height="100">
+                        @else
+                            No Image
+                        @endif
+                    </td>
+                    <td>{{ $producto->costo }}</td>
+                    <td>{{ $producto->precio }}</td>
+                    <td>{{ $producto->stock }}</td>
+                    <td>{{ $producto->categoria->nombre }}</td>
+                    <td>
+                        <a href="{{ route('admin.productos.edit', $producto->id) }}" class="btn btn-sm btn-primary">Editar</a>
+                        <button class="btn btn-sm btn-success addToCartBtn" data-id="{{ $producto->id }}"
+                            data-price="{{ $producto->precio }}" data-name="{{ $producto->nombre }}">Agregar al
+                            carrito</button>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach($productos as $producto)
-                    <tr>
-                        <td>{{ $producto->id }}</td>
-                        <td>{{ $producto->sku }}</td>
-                        <td>{{ $producto->nombre }}</td>
-                        <td>{{ $producto->descripcion }}</td>
-                        <td>
-                            @if($producto->imagen)
-                                <img loading="lazy" src="{{ asset('storage/productos/' . $producto->imagen ) }}" alt="Imagen no encontrada o con otra extencion" width="100" height="100">
-                            @else
-                                No Image
-                            @endif
-                        </td>
-                        <td>{{ $producto->costo }}</td>
-                        <td>{{ $producto->precio }}</td>
-                        <td>{{ $producto->stock }}</td>
-                        <td>{{ $producto->categoria->nombre }}</td>
-                        <td>
-                            <a href="{{ route('admin.productos.edit', $producto->id) }}" class="btn btn-sm btn-primary">Editar</a>
-                            <button class="btn btn-sm btn-success addToCartBtn" data-id="{{ $producto->id }}" data-price="{{ $producto->precio }}" data-name="{{ $producto->nombre }}">Agregar al carrito</button>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+            @endforeach
+        </tbody>
+    </table>
 
     <!-- Modal agregar al carrito -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="cartModalLabel"><b> Agregar al Carrito:</b> <span id="productName" class="float-right"></span></h5>
+                    <h5 class="modal-title" id="cartModalLabel"><b> Agregar al Carrito:</b> <span id="productName"
+                            class="float-right"></span></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -66,7 +70,8 @@
                         </div>
                         <div class="form-group">
                             <label for="precio_venta_unidad">Precio de venta:</label>
-                            <input type="number" class="form-control" id="precio_venta_unidad" name="precio_venta_unidad" required>
+                            <input type="number" class="form-control" id="precio_venta_unidad" name="precio_venta_unidad"
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="cantidad">Cantidad:</label>
@@ -127,7 +132,9 @@
                         Swal.fire('¡Éxito!', 'Producto agregado al carrito', 'success');
                     },
                     error: function(error) {
-                        var errorMessage = error.responseJSON && error.responseJSON.message ? error.responseJSON.message : 'No se pudo agregar el producto al carrito';
+                        var errorMessage = error.responseJSON && error.responseJSON.message ?
+                            error.responseJSON.message :
+                            'No se pudo agregar el producto al carrito';
                         Swal.fire('Error', errorMessage, 'error');
                     }
                 });
