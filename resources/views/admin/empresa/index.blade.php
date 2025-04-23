@@ -28,7 +28,7 @@
         </div>
 
         <div class="form-group">
-            <label for="numero">Número</label>
+            <label for="numero">Teléfono</label>
             <input type="text" name="numero" id="numero" class="form-control"
                 value="{{ old('numero', isset($empresa) ? $empresa->numero : '') }}">
         </div>
@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group">
-            <label for="estado">Estado</label>
+            <label for="estado">Región</label>
             <input type="text" name="estado" id="estado" class="form-control"
                 value="{{ old('estado', isset($empresa) ? $empresa->estado : '') }}">
         </div>
